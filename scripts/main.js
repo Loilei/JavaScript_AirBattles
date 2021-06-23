@@ -1,10 +1,10 @@
 
 const canvas = document.getElementById('ufoCanvas')
-canvas.width = 1150;
-canvas.height = 700;
+canvas.width = 900;
+canvas.height = 750
 
-const ctx = canvas.getContext('2d');
 
+// const ctx = canvas.getContext('2d');
 
 // ctx.fillStyle = 'green';
 // ctx.fillRect(0,0,150,75);
@@ -22,7 +22,7 @@ const ctx = canvas.getContext('2d');
 // };
 
 function resize() {
-    const height = window.innerHeight - 20;
+    const height = window.innerHeight -20;
     const ratio = canvas.width / canvas.height;
     const width = height * ratio;
 
@@ -42,14 +42,8 @@ function GameBasics(canvas) {
         top: 150,
         bottom: 650,
         left: 100,
-        right: 1050
+        right: 800
     };
-
-    this.setting = {
-        //FPS :
-        updateSeconds: (1/60),
-
-    }
 
     this.settings = {
 
@@ -77,7 +71,7 @@ GameBasics.prototype.goToPosition = function(position) {
     //if we infds an 'entry' in a given position, we call it
     if (position.entry) {
         position.entry(play);
-    };
+    }
     //setting the current game position in the positionContainer
     this.positionContainer.push(position);
 
@@ -94,42 +88,4 @@ GameBasics.prototype.pushPosition = function () {
 GameBasics.prototype.popPosition = function () {
 this.positionContainer.pop();
 
-};
-
-GameBasics.prototype.start = function () {
-    setInterval(function() {gameLoop(play);}, this.setting.updateSeconds * 1000);
-    (method) GameBasics.goToPosition(position: any): void
-    this.goToPosition(new OpeningPosition());
-
-    // let num = 1;
-    //
-    // function exampleFunction(){
-    //     ctx.clearRect(0,0,play.width, play.height);
-    //     ctx.font = "90px Arial";
-    //     ctx.fillStyle = "#999999";
-    //     ctx.fillText(num, 1100/2,300);
-    //     num++;
-    //
-    // }
-
-};
-
-const play = new GameBasics(canvas);
-play.start();
-
-function gameLoop(play) {
-
-    let presentPosition = play.presentPosition;
-
-    if(presentPosition) {
-        //update
-        if(presentPosition.update) {
-            presentPosition.update(play);
-
-        };
-        if(presentPosition.draw){
-            presentPosition.draw(play);
-        };
-        //draw
-    };
 }
