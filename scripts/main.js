@@ -14,7 +14,7 @@ function resize(){
 
 window.addEventListener('load',resize,false);
 
-function gameBasics(canvas) {
+function GameBasics(canvas) {
     this.canvas = canvas;
     this.width = canvas.width;
     this.height = canvas.height;
@@ -33,11 +33,11 @@ function gameBasics(canvas) {
     this.positionContainer = [];
 };
 
-gameBasics.prototype.presentPosition = function () {
+GameBasics.prototype.presentPosition = function () {
     return this.positionContainer.length > 0 ? this.positionContainer[this.positionContainer.length - 1] : null;
 };
 
-gameBasics.prototype.goToPosition = function (position) {
+GameBasics.prototype.goToPosition = function (position) {
     if (this.presentPosition()) {
         this.positionContainer.length = 0;
     }
@@ -49,15 +49,15 @@ gameBasics.prototype.goToPosition = function (position) {
     this.positionContainer.push(position);
 };
 
-gameBasics.prototype.pushPosition = function (position) {
+GameBasics.prototype.pushPosition = function (position) {
     this.positionContainer.push(position);
 };
 
-gameBasics.prototype.popPosition = function (position) {
+GameBasics.prototype.popPosition = function (position) {
     this.positionContainer.pop();
 };
 
-gameBasics.prototype.start = function () {
+GameBasics.prototype.start = function () {
     setInterval(function() {
         gameLoop(play);
     }, this.setting.updateSeconds * 1000);
@@ -65,11 +65,12 @@ gameBasics.prototype.start = function () {
     this.goToPosition(new OpeningPosition());
 };
 
-const play = new gameBasics(canvas);
+const play = new GameBasics(canvas);
 play.start();
 
 function gameLoop(play) {
-    let presentPosition = play.presentPosition;
+
+    let presentPosition = play.presentPosition();
 
     if (presentPosition) {
 
