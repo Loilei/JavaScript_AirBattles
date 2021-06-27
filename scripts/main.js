@@ -12,3 +12,46 @@ function resize(){
 };
 
 window.addEventListener('load',resize,false);
+
+function gameBasics(canvas) {
+    this.canvas = canvas;
+    this.width = canvas.width;
+    this.height = canvas.height;
+
+    this.playBoundaries = {
+        top: 150,
+        bottom: 650,
+        left: 100,
+        right: 800
+    };
+
+    this.setting = {
+        // TODO game settings
+    }
+
+    this.positionContainer = [];
+};
+
+gameBasics.prototype.presentPosition = function () {
+    return this.positionContainer.length > 0 ? this.positionContainer[this.positionContainer.length - 1] : null;
+};
+
+gameBasics.prototype.goToPosition = function (position) {
+    if (this.presentPosition()) {
+        this.positionContainer.length = 0;
+    }
+
+    if (position.entry) {
+        position.entry(play);
+    }
+
+    this.positionContainer.push(position);
+};
+
+gameBasics.prototype.pushPosition = function (position) {
+    this.positionContainer.push(position);
+};
+
+gameBasics.prototype.popPosition = function (position) {
+    this.positionContainer.pop();
+};
