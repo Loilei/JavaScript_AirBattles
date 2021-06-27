@@ -15,11 +15,15 @@ InGamePosition.prototype.entry = function (play) {
     this.ufo_image = new Image();
     this.upSec = this.setting.updateSeconds;
     this.turnAround = 1;
+    this.horizontalMoving = 1;
+    this.verticalMoving = 0;
+    this.ufosAreSinking = false;
+    this.ufoPresentSinkingValue = 0;
 
     // Values ​​that change with levels (1. UFO speed, 2. Bomb falling speed, 3. Bomb dropping frequency)
     let presentLevel = this.level;
     // 1. UFO speed
-    this.ufoSpeed = this.setting.ufoSpeed + (presentLevel * 7); //Level1: 35 + (1*7) = 42, Level2: 42 + (2*7) = 49, ...
+    this.ufoSpeed = this.setting.ufoSpeed + (presentLevel * 7); //Level1: 35 + (1*7) = 42, Level2: 35 + (2*7) = 49, ...
 
     // Creating Spaceship
     this.spaceshipSpeed = this.setting.spaceshipSpeed;
@@ -86,22 +90,32 @@ InGamePosition.prototype.update = function (play) {
     }
 
     // Movements of UFOS
-    let reachedRight = false;
-    let reachedLeft = false;
+    let reachedSide = false;
 
     for (let i = 0; i < this.ufos.length; i++) {
         let ufo = this.ufos[i];
-        let fresh_x = ufo.x + this.ufoSpeed * upSec * this.turnAround;
-        if (fresh_x > play.playBoundaries.right) {
+        let fresh_x = ufo.x + this.ufoSpeed * upSec * this.turnAround * this.horizontalMoving;
+        let fresh_y = ufo.y + this.ufoSpeed * upSec * this.verticalMoving;
+        if (fresh_x > play.playBoundaries.right || fresh_x < play.playBoundaries.left) {
             this.turnAround *= -1;
-            reachedRight = true;
+            reachedSide = true;
+            this.horizontalMoving = 0;
+            this.verticalMoving = 1;
+            this.ufosAreSinking = true;
         }
-        if (fresh_x < play.playBoundaries.left) {
-            this.turnAround *= -1;
-            reachedLeft = true;
-        }
-        if (!reachedRight == true && !reachedLeft == true) {
+        if (reachedSide !== true) {
             ufo.x = fresh_x;
+            ufo.y = fresh_y;
+        }
+    }
+
+    if (this.ufosAreSinking == true) {
+        this.ufoPresentSinkingValue += this.ufoSpeed * upSec;
+        if (this.ufoPresentSinkingValue >= this.setting.ufoSinkingValue) {
+            this.ufosAreSinking = false;
+            this.verticalMoving = 0;
+            this.horizontalMoving = 1;
+            this.ufoPresentSinkingValue = 0;
         }
     }
 }
