@@ -2,9 +2,6 @@ const canvas = document.getElementById('ufoCanvas');
 canvas.width = 900;
 canvas.height = 750;
 
-// const ctx = canvas.getContext('2d');
-
-
 function resize(){
     const height = window.innerHeight - 20;
     const ratio = canvas.width / canvas.height;
