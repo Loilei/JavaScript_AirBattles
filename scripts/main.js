@@ -3,24 +3,6 @@ const canvas = document.getElementById('ufoCanvas')
 canvas.width = 900;
 canvas.height = 750
 
-
-// const ctx = canvas.getContext('2d');
-
-// ctx.fillStyle = 'green';
-// ctx.fillRect(0,0,150,75);
-
-// ctx.font = '38 px Arial';
-// ctx.fillStyle = 'red';
-// ctx.fillText("UFO",30,130);
-// ctx.strokeText("Hunter", 120,120);
-
-// aircraftImage = new Image();
-// aircraftImage.src = "images/aircraft.png";
-
-// aircraftImage.onload = function() {
-//     return ctx.drawImage(aircraftImage, 0, 0);
-// };
-
 function resize() {
     const height = window.innerHeight -20;
     const ratio = canvas.width / canvas.height;
@@ -44,10 +26,10 @@ function GameBasics(canvas) {
         left: 100,
         right: 800
     };
-
-    this.settings = {
-
-        //game settings
+    //game settings
+    this.setting = {
+        updateSeconds: (1 / 60),
+        
     }
     //collect the positions here
     this.positionContainer = [];
@@ -88,4 +70,27 @@ GameBasics.prototype.pushPosition = function () {
 GameBasics.prototype.popPosition = function () {
 this.positionContainer.pop();
 
+};
+
+GameBasics.prototype.start = function () {
+    setInterval(function(){ gameLoop(play); }, this.setting.updateSeconds * 1000);
+    this.goToPosition(new OpeningPosition()); 
+    
+};
+
+const play = new GameBasics(canvas);
+
+function gameLoop(play) {
+    let presentPosition = play.presentPosition;
+
+    if(presentPosition) {
+        //update
+        if(presentPosition.update) {
+            presentPosition.update(play);
+        }
+        //draw
+        if(presentPosition.draw) {
+            presentPosition.draw(play);
+        }
+    }
 }
