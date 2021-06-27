@@ -8,6 +8,7 @@ function InGamePosition(setting, level) {
     this.bullets = [];
     this.lastBulletTime = null;
     this.ufos = [];
+    this.bombs = [];
 }
 
 InGamePosition.prototype.entry = function (play) {
@@ -25,6 +26,9 @@ InGamePosition.prototype.entry = function (play) {
     // 1. UFO speed
     this.ufoSpeed = this.setting.ufoSpeed + (presentLevel * 7); //Level1: 35 + (1*7) = 42, Level2: 35 + (2*7) = 49, ...
 
+    this.bombSpeed = this.setting.bombSpeed + (presentLevel * 10);
+
+    this.bombFrequency = this.setting.bombFrequency + (presentLevel * 0.05);
     // Creating Spaceship
     this.spaceshipSpeed = this.setting.spaceshipSpeed;
     this.object = new Objects();
@@ -118,6 +122,33 @@ InGamePosition.prototype.update = function (play) {
             this.ufoPresentSinkingValue = 0;
         }
     }
+
+    const frontLineUFOs = [];
+    for (let i = 0; i < this.ufos.length; i++) {
+        let ufo = this.ufos[i];
+        if (!frontLineUFOs[ufo.column] || frontLineUFOs[ufo.column].line < ufo.line) {
+            frontLineUFOs[ufo.column] = ufo;
+        }
+    }
+
+    for (let i = 0; i < this.setting.ufoColumns; i++) {
+        let ufo = frontLineUFOs[i];
+        if (!ufo) continue;
+        let chance = this.bombFrequency * upSec;
+        this.object = new Objects();
+        if (chance > Math.random()) {
+            this.bombs.push(this.object.bomb(ufo.x, ufo.y + ufo.height / 2));
+        }
+     }
+
+    for (let i = 0; i < this.bombs.length; i++) {
+        let bomb = this.bombs[i];
+        bomb.y += upSec * this.bombSpeed;
+
+        if (bomb.y > this.height) {
+            this.bombs.splice(i--, 1);
+        }
+    }
 }
 
 InGamePosition.prototype.draw = function (play) {
@@ -136,6 +167,12 @@ InGamePosition.prototype.draw = function (play) {
     for (let i = 0; i < this.ufos.length; i++) {
         let ufo = this.ufos[i];
         ctx.drawImage(this.ufo_image, ufo.x - (ufo.width / 2), ufo.y - (ufo.height / 2));
+    }
+
+    ctx.fillStyle = "#FE2EF7";
+    for (let i = 0; i < this.bombs.length; i++) {
+        let bomb = this.bombs[i];
+        ctx.fillRect(bomb.x - 2, bomb.y, 4, 6);
     }
 }
 

@@ -52,6 +52,9 @@ function GameBasics(canvas) {
     ufoColumns: 8, //number of UFO columns		 
     ufoSpeed: 35, //speed of UFO 
     ufoSinkingValue: 30, //that's how much the UFO sinks, value of sinking
+
+    bombSpeed: 75,
+    bombFrequency: 0.05,
   };
 
   // we collect here the different positions, states of the game 
