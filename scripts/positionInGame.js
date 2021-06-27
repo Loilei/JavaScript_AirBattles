@@ -1,3 +1,5 @@
+// --- positionInGame --- //
+
 function InGamePosition(setting, level) {
     this.setting = setting;
     this.level = level;
@@ -6,13 +8,21 @@ function InGamePosition(setting, level) {
 }
 
 InGamePosition.prototype.entry = function (play) {
-    this.spaceship_image = new Image();
+    this.spaceship_image = new Image(); 
+    this.upSec = this.setting.updateSeconds;
+    this.spaceshipSpeed = this.setting.spaceshipSpeed;
+
     this.object = new Objects();
     this.spaceship = this.object.spaceship((play.width / 2), play.playBoundaries.bottom, this.spaceship_image);
 }
 
 InGamePosition.prototype.update = function (play) {
-    //more code
+    if (play.pressedKeys[37]) {
+        this.spaceship.x -= this.spaceshipSpeed * this.upSec;
+    }
+    if (play.pressedKeys[39]) {
+        this.spaceship.x += this.spaceshipSpeed * this.upSec;
+    }
 }
 
 InGamePosition.prototype.draw = function (play) {
@@ -20,6 +30,11 @@ InGamePosition.prototype.draw = function (play) {
     ctx.drawImage(this.spaceship_image, this.spaceship.x - (this.spaceship.width / 2), this.spaceship.y - (this.spaceship.height / 2));
 }
 
-InGamePosition.prototype.keyDown = function (play, keyCode) {
-    //more code
+InGamePosition.prototype.keyDown = function (play, keyboardCode) {
+
 }
+
+
+
+
+
