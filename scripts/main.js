@@ -6,8 +6,10 @@ const ctx = canvas.getContext('2d');
 
 // Canvas automatic resizing
 function resize() {
+  // Our canvas must cover full height of screen regardless of the resolution
   const height = window.innerHeight - 20;
 
+  // So we need to calculate the proper scaled width that should work well with every resolution
   const ratio = canvas.width / canvas.height;
   const width = height * ratio;
 
@@ -38,17 +40,18 @@ function GameBasics(canvas) {
 
   // game settings
   this.setting = {
-    updateSeconds: (1 / 144),
+    //FPS: 60 frame per 1 second, this means 1 new frame in every 0,01666667 seconds  
+    updateSeconds: (1 / 60),
   };
 
-  // States of the game 
+  // we collect here the different positions, states of the game 
   this.positionContainer = [];
 
-  // Pressed keys storing
+  // pressed keys storing
   this.pressedKeys = {};
 }
 
-//  Current game position
+//  Return to current game position, status. Always returns the top element of positionContainer.
 GameBasics.prototype.presentPosition = function () {
   return this.positionContainer.length > 0 ? this.positionContainer[this.positionContainer.length - 1] : null;
 };
@@ -89,7 +92,6 @@ GameBasics.prototype.start = function () {
 GameBasics.prototype.keyDown = function (keyboardCode) {
   // store the pressed key in 'pressedKeys'
   this.pressedKeys[keyboardCode] = true;
-  //console.log(this.pressedKeys);
   //  it calls the present position's keyDown function
   if (this.presentPosition() && this.presentPosition().keyDown) {
     this.presentPosition().keyDown(this, keyboardCode);
