@@ -1,3 +1,5 @@
+// --- positionTransfer --- //
+
 function TransferPosition(level) {
     this.level = level;
     this.fontSize = 140;
@@ -8,6 +10,7 @@ TransferPosition.prototype.update = function (play) {
     this.fontSize -= 1;
     this.fontColor -= 1.5;
     if (this.fontSize < 1) {
+        //  if the condition is met it will go to the InGamePosition
         play.goToPosition(new InGamePosition(play.setting, this.level));
     }
 };

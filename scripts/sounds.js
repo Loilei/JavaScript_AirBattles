@@ -1,7 +1,7 @@
 // --- sounds --- //
 
 function Sounds() {
-    // more code
+    this.muted = false;
 }
 
 Sounds.prototype.init = function () {
@@ -16,6 +16,10 @@ Sounds.prototype.init = function () {
 };
 
 Sounds.prototype.playSound = function (soundName) {
+    if (this.muted === true) {
+        return;
+    }
+
     let soundNumber;
     switch (soundName) {
         case 'shot':
@@ -35,5 +39,9 @@ Sounds.prototype.playSound = function (soundName) {
 };
 
 Sounds.prototype.muteSwitch = function () {
-    // more code
+    if (this.muted === false) {
+        this.muted = true;
+    } else if (this.muted === true) {
+        this.muted = false;
+    }
 };

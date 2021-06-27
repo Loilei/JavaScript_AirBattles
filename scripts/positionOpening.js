@@ -1,17 +1,18 @@
+// --- positionOpening --- //
+
 function OpeningPosition() {
+}
 
-};
-
-OpeningPosition.prototype.draw = function(play) {
-    // Game logo
+OpeningPosition.prototype.draw = function(play) {	
+	// UFO Hunter
     ctx.clearRect(0, 0, play.width, play.height);
-    ctx.font="80px Comic Sans MS";
+	ctx.font="80px Comic Sans MS";
     ctx.textAlign="center"; 
-    const gradient = ctx.createLinearGradient((play.width/2-180),(play.height/2), (play.width/2+180), (play.height/2));   
-    gradient.addColorStop("0","yellow");	
-    gradient.addColorStop("0.5","red");
-    gradient.addColorStop("1.0","yellow");
-    ctx.fillStyle = gradient;	
+	const gradient = ctx.createLinearGradient((play.width/2-180),(play.height/2), (play.width/2+180), (play.height/2));   
+	gradient.addColorStop("0","yellow");	
+	gradient.addColorStop("0.5","red");
+	gradient.addColorStop("1.0","yellow");
+	ctx.fillStyle = gradient;	
     ctx.fillText("UFO HUNTER", play.width / 2, play.height/2 - 70); 
 
     // Press 'Space' to start.
@@ -28,7 +29,10 @@ OpeningPosition.prototype.draw = function(play) {
 };
 
 OpeningPosition.prototype.keyDown = function(play, keyboardCode) {
-    if (keyboardCode == 32) {
+    if(keyboardCode == 32)  {
+        play.level = 1;
+        play.score = 0;
+        play.shields = 2;
         play.goToPosition(new TransferPosition(play.level));
     }
 };
