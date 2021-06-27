@@ -1,6 +1,7 @@
 const canvas = document.getElementById('ufoCanvas');
 canvas.width = 900;
 canvas.height = 750;
+const ctx = canvas.getContext('2d');
 
 function resize(){
     const height = window.innerHeight - 20;
@@ -26,7 +27,7 @@ function gameBasics(canvas) {
     };
 
     this.setting = {
-        // TODO game settings
+        updateSeconds: (1 / 144),
     }
 
     this.positionContainer = [];
@@ -55,3 +56,29 @@ gameBasics.prototype.pushPosition = function (position) {
 gameBasics.prototype.popPosition = function (position) {
     this.positionContainer.pop();
 };
+
+gameBasics.prototype.start = function () {
+    setInterval(function() {
+        gameLoop(play);
+    }, this.setting.updateSeconds * 1000);
+
+    this.goToPosition(new OpeningPosition());
+};
+
+const play = new gameBasics(canvas);
+play.start();
+
+function gameLoop(play) {
+    let presentPosition = play.presentPosition;
+
+    if (presentPosition) {
+
+        if (presentPosition.update) {
+            presentPosition.update(play);
+        }
+
+        if (presentPosition.draw) {
+            presentPosition.draw(play);
+        }
+    }
+}
