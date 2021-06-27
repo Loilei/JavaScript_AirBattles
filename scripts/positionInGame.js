@@ -57,7 +57,7 @@ InGamePosition.prototype.entry = function (play) {
         }
     }
     this.ufos = ufosInitial;
-}
+};
 
 InGamePosition.prototype.update = function (play) {
     const spaceship = this.spaceship;
@@ -173,6 +173,7 @@ InGamePosition.prototype.update = function (play) {
         // if there is collision we delete the UFO
         if (collision == true) {
             this.ufos.splice(i--, 1);
+            play.sounds.playSound('ufoDeath');
         }
     }
 
@@ -186,7 +187,8 @@ InGamePosition.prototype.update = function (play) {
             // if there is collision we delete the bomb   
             this.bombs.splice(i--, 1);
             // effect on the spaceship
-            play.goToPosition(new OpeningPosition());
+            play.sounds.playSound('explosion');
+		    play.goToPosition(new OpeningPosition());
         }
     }
 
@@ -198,10 +200,20 @@ InGamePosition.prototype.update = function (play) {
             (ufo.y + ufo.height/2) > (spaceship.y - spaceship.height/2) &&
             (ufo.y - ufo.height/2) < (spaceship.y + spaceship.height/2)) {
             // if there is collision the spaceship explodes
+            play.sounds.playSound('explosion');
 		    play.goToPosition(new OpeningPosition());
         }
     }
-}
+};
+
+InGamePosition.prototype.shoot = function () {
+    if (this.lastBulletTime === null || ((new Date()).getTime() - this.lastBulletTime) > (this.setting.bulletMaxFrequency)) {
+        this.object = new Objects();
+        this.bullets.push(this.object.bullet(this.spaceship.x, this.spaceship.y - this.spaceship.height / 2, this.setting.bulletSpeed));
+        this.lastBulletTime = (new Date()).getTime();
+        play.sounds.playSound('shot');
+    }
+};
 
 InGamePosition.prototype.draw = function (play) {
     // draw Spaceship
@@ -227,19 +239,11 @@ InGamePosition.prototype.draw = function (play) {
         let bomb = this.bombs[i];
         ctx.fillRect(bomb.x - 2, bomb.y, 4, 6);
     }
-}
-
-InGamePosition.prototype.shoot = function () {
-    if (this.lastBulletTime === null || ((new Date()).getTime() - this.lastBulletTime) > (this.setting.bulletMaxFrequency)) {
-        this.object = new Objects();
-        this.bullets.push(this.object.bullet(this.spaceship.x, this.spaceship.y - this.spaceship.height / 2, this.setting.bulletSpeed));
-        this.lastBulletTime = (new Date()).getTime();
-    }
 };
 
 InGamePosition.prototype.keyDown = function (play, keyboardCode) {
     // more code
-}
+};
 
 
 
