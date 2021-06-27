@@ -1,3 +1,5 @@
+// --- main --- //
+
 // Canvas drawing
 const canvas = document.getElementById('ufoCanvas');
 canvas.width = 900;

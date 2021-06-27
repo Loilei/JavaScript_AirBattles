@@ -1,6 +1,5 @@
 function TransferPosition(level) {
     this.level = level;
-    //this.num = 1;
     this.fontSize = 140;
     this.fontColor = 255;
 }
