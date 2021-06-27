@@ -9,7 +9,7 @@ TransferPosition.prototype.update = function(play) {
     this.fontSize -= 1;
     this.fontColor -= 1.5;
     if(this.fontSize < 1) {
-        play.goToPosition(new InGamePosition(play.settings, this.level));
+        play.goToPosition(new InGamePosition(play.setting, this.level));
     }
     
 };

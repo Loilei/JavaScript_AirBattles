@@ -41,9 +41,11 @@ function GameBasics(canvas) {
   this.shields = 2;
 
   // game settings
-  this.setting = {
-    //FPS: 60 frame per 1 second, this means 1 new frame in every 0,01666667 seconds  
-    updateSeconds: (1 / 60),
+  this.setting = {  
+    updateSeconds: (1 / 144), //FPS: 60 frame per 1 second, this means 1 new frame in every 0,01666667 seconds
+    spaceshipSpeed: 200, //our spaceship's speed 
+    bulletSpeed: 130,
+    bulletMaxFrequency: 500,
   };
 
   // we collect here the different positions, states of the game 
@@ -94,7 +96,6 @@ GameBasics.prototype.start = function () {
 GameBasics.prototype.keyDown = function (keyboardCode) {
   // store the pressed key in 'pressedKeys'
   this.pressedKeys[keyboardCode] = true;
-  //console.log(this.pressedKeys);
   //  it calls the present position's keyDown function
   if (this.presentPosition() && this.presentPosition().keyDown) {
     this.presentPosition().keyDown(this, keyboardCode);
