@@ -28,5 +28,7 @@ OpeningPosition.prototype.draw = function(play) {
 };
 
 OpeningPosition.prototype.keyDown = function(play, keyboardCode) {
-// more code
+    if (keyboardCode == 32) {
+        play.goToPosition(new TransferPosition(play.level));
+    }
 };
