@@ -17,11 +17,24 @@ InGamePosition.prototype.entry = function (play) {
 }
 
 InGamePosition.prototype.update = function (play) {
+    const spaceship = this.spaceship;
+    const spaceshipSpeed = this.spaceshipSpeed;
+	const upSec = this.setting.updateSeconds;
+    
+    // Keyboard events
     if (play.pressedKeys[37]) {
-        this.spaceship.x -= this.spaceshipSpeed * this.upSec;
+        spaceship.x -= spaceshipSpeed * upSec;
     }
     if (play.pressedKeys[39]) {
-        this.spaceship.x += this.spaceshipSpeed * this.upSec;
+        spaceship.x += spaceshipSpeed * upSec;
+    }
+
+    // Keep spaceship in 'Active playing field'
+    if(spaceship.x < play.playBoundaries.left) {
+        spaceship.x = play.playBoundaries.left;
+    }
+    if(spaceship.x > play.playBoundaries.right) {
+        spaceship.x = play.playBoundaries.right;
     }
 }
 
@@ -31,7 +44,7 @@ InGamePosition.prototype.draw = function (play) {
 }
 
 InGamePosition.prototype.keyDown = function (play, keyboardCode) {
-
+    // more code
 }
 
 
