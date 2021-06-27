@@ -7,15 +7,42 @@ function InGamePosition(setting, level) {
     this.spaceship = null;
     this.bullets = [];
     this.lastBulletTime = null;
+    this.ufos = [];
 }
 
 InGamePosition.prototype.entry = function (play) {
-    this.spaceship_image = new Image();
+    this.spaceship_image = new Image(); 
+    this.ufo_image = new Image(); 
     this.upSec = this.setting.updateSeconds;
-    this.spaceshipSpeed = this.setting.spaceshipSpeed;
 
+    // Creating Spaceship
+    this.spaceshipSpeed = this.setting.spaceshipSpeed;
     this.object = new Objects();
     this.spaceship = this.object.spaceship((play.width / 2), play.playBoundaries.bottom, this.spaceship_image);
+
+    // Creating UFOS
+    const lines = this.setting.ufoLines;
+    const columns = this.setting.ufoColumns;
+    const ufosInitial = [];
+
+    let line, column;
+    for (line = 0; line < lines; line++) {
+        for (column = 0; column < columns; column++) {
+            this.object = new Objects();
+            let x, y;
+            x = (play.width / 2) + (column * 50) - ((columns - 1) * 25);
+            y = (play.playBoundaries.top + 30) + (line * 30);
+            ufosInitial.push(this.object.ufo(
+                x,
+                y,
+                line,
+                column,
+                this.ufo_image
+            ));
+            console.log('line: ' + line + ' column: ' + column + '  x:' + x + ' y:' + y);
+        }
+    }
+    this.ufos = ufosInitial;
 }
 
 InGamePosition.prototype.update = function (play) {
@@ -65,13 +92,16 @@ InGamePosition.prototype.draw = function (play) {
         let bullet = this.bullets[i];
         ctx.fillRect(bullet.x - 1, bullet.y - 6, 2, 6);
     }
+
+    // draw UFOS	
+    for (let i = 0; i < this.ufos.length; i++) {
+        let ufo = this.ufos[i];
+        ctx.drawImage(this.ufo_image, ufo.x - (ufo.width / 2), ufo.y - (ufo.height / 2));
+    }
 }
 
-
 InGamePosition.prototype.shoot = function () {
-    console.log(((new Date()).getTime() - this.lastBulletTime));
     if (this.lastBulletTime === null || ((new Date()).getTime() - this.lastBulletTime) > (this.setting.bulletMaxFrequency)) {
-        console.log('We are shooting!');
         this.object = new Objects();
         this.bullets.push(this.object.bullet(this.spaceship.x, this.spaceship.y - this.spaceship.height / 2, this.setting.bulletSpeed));
         this.lastBulletTime = (new Date()).getTime();
@@ -81,8 +111,4 @@ InGamePosition.prototype.shoot = function () {
 InGamePosition.prototype.keyDown = function (play, keyboardCode) {
     // more code
 }
-
-
-
-
 
