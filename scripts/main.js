@@ -44,7 +44,9 @@ function GameBasics(canvas) {
   this.setting = {
     //FPS: 60 frame per 1 second, this means 1 new frame in every 0,01666667 seconds  
     updateSeconds: (1 / 60),
-    spaceshipSpeed: 200
+    spaceshipSpeed: 200,
+    bulletSpeed: 130,
+    bulletMaxFrequency: 500
   };
 
   // we collect here the different positions, states of the game 
