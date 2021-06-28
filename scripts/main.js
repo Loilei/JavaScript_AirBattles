@@ -46,6 +46,11 @@ function GameBasics(canvas) {
     spaceshipSpeed: 200, //our spaceship's speed 
     bulletSpeed: 130,
     bulletMaxFrequency: 500,
+
+    ufoLines: 4,
+    ufoColumns: 8,
+    ufoSpeed: 35,
+
   };
 
   // we collect here the different positions, states of the game 
