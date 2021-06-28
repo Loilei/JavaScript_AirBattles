@@ -42,19 +42,21 @@ function GameBasics(canvas) {
 
   // game settings
   this.setting = {  
-    updateSeconds: (1 / 144), //FPS: 60 frame per 1 second, this means 1 new frame in every 0,01666667 seconds
-    spaceshipSpeed: 200, //our spaceship's speed 
-    bulletSpeed: 130,
-    bulletMaxFrequency: 500,
+    updateSeconds: (1 / 60), //FPS: 60 frame per 1 second, this means 1 new frame in every 0,01666667 seconds
+    spaceshipSpeed: 200, //our spaceship's speed
 
-    ufoLines: 4,
-    ufoColumns: 8,
-    ufoSpeed: 35,
-    ufoSinkingValue: 30,
+    bulletSpeed: 130, //bullets speed of spaceship
+    bulletMaxFrequency: 500, //how fast our spaceship can shoot one after another
+ 	
+    ufoLines: 4, //number of UFO lines                                            	
+    ufoColumns: 8, //number of UFO columns	                                       	 
+    ufoSpeed: 35, //speed of UFO  
+    ufoSinkingValue: 30, //that's how much the UFO sinks, value of sinking
     
-    bombSpeed: 75,
-    bombFrequency: 0.05,
-
+    bombSpeed: 75, //bomb falling speed
+    bombFrequency: 0.05, //bomb dropping frequency
+    
+    pointsPerUFO: 25, //points per UFO value 
   };
 
   // we collect here the different positions, states of the game 
@@ -147,5 +149,9 @@ window.addEventListener("keyup", function (e) {
 
 // Create a GameBasics object
 const play = new GameBasics(canvas);
+play.sounds = new Sounds(); 
+play.sounds.init();
 play.start();
+
+
 
