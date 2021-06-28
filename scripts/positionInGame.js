@@ -11,9 +11,19 @@ function InGamePosition(setting, level) {
 }
 
 InGamePosition.prototype.entry = function (play) {
-    this.spaceship_image = new Image(); 
-    this.ufo_image = new Image(); 
+    this.spaceship_image = new Image();
+    this.ufo_image = new Image();
     this.upSec = this.setting.updateSeconds;
+    this.turnAround = 1;
+    this.horizontalMoving = 1;
+    this.verticalMoving = 0;
+    this.ufosAreSinking = false;
+    this.ufoPresentSinkingValue = 0;
+
+    // Values ​​that change with levels (1. UFO speed, 2. Bomb falling speed, 3. Bomb dropping frequency)
+    let presentLevel = this.level;
+    // 1. UFO speed
+    this.ufoSpeed = this.setting.ufoSpeed + (presentLevel * 7); //Level1: 35 + (1*7) = 42, Level2: 35 + (2*7) = 49, ...
 
     // Creating Spaceship
     this.spaceshipSpeed = this.setting.spaceshipSpeed;
@@ -39,7 +49,6 @@ InGamePosition.prototype.entry = function (play) {
                 column,
                 this.ufo_image
             ));
-            console.log('line: ' + line + ' column: ' + column + '  x:' + x + ' y:' + y);
         }
     }
     this.ufos = ufosInitial;
@@ -79,6 +88,36 @@ InGamePosition.prototype.update = function (play) {
             bullets.splice(i--, 1);
         }
     }
+
+    // Movements of UFOS
+    let reachedSide = false;
+
+    for (let i = 0; i < this.ufos.length; i++) {
+        let ufo = this.ufos[i];
+        let fresh_x = ufo.x + this.ufoSpeed * upSec * this.turnAround * this.horizontalMoving;
+        let fresh_y = ufo.y + this.ufoSpeed * upSec * this.verticalMoving;
+        if (fresh_x > play.playBoundaries.right || fresh_x < play.playBoundaries.left) {
+            this.turnAround *= -1;
+            reachedSide = true;
+            this.horizontalMoving = 0;
+            this.verticalMoving = 1;
+            this.ufosAreSinking = true;
+        }
+        if (reachedSide !== true) {
+            ufo.x = fresh_x;
+            ufo.y = fresh_y;
+        }
+    }
+
+    if (this.ufosAreSinking == true) {
+        this.ufoPresentSinkingValue += this.ufoSpeed * upSec;
+        if (this.ufoPresentSinkingValue >= this.setting.ufoSinkingValue) {
+            this.ufosAreSinking = false;
+            this.verticalMoving = 0;
+            this.horizontalMoving = 1;
+            this.ufoPresentSinkingValue = 0;
+        }
+    }
 }
 
 InGamePosition.prototype.draw = function (play) {
@@ -90,10 +129,10 @@ InGamePosition.prototype.draw = function (play) {
     ctx.fillStyle = '#ff0000';
     for (let i = 0; i < this.bullets.length; i++) {
         let bullet = this.bullets[i];
-        ctx.fillRect(bullet.x - 1, bullet.y - 6, 2, 6);
+        ctx.fillRect(bullet.x - 1, bullet.y - 6, 3, 6);
     }
 
-    // draw UFOS	
+    // draw UFOS     
     for (let i = 0; i < this.ufos.length; i++) {
         let ufo = this.ufos[i];
         ctx.drawImage(this.ufo_image, ufo.x - (ufo.width / 2), ufo.y - (ufo.height / 2));
@@ -111,4 +150,8 @@ InGamePosition.prototype.shoot = function () {
 InGamePosition.prototype.keyDown = function (play, keyboardCode) {
     // more code
 }
+
+
+
+
 
