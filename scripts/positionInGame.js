@@ -8,6 +8,7 @@ function InGamePosition(setting, level) {
     this.bullets = [];
     this.lastBulletTime = null;
     this.ufos = [];
+    this.bombs = []; 
 }
 
 InGamePosition.prototype.entry = function (play) {
@@ -24,6 +25,10 @@ InGamePosition.prototype.entry = function (play) {
     let presentLevel = this.level;
     // 1. UFO speed
     this.ufoSpeed = this.setting.ufoSpeed + (presentLevel * 7); //Level1: 35 + (1*7) = 42, Level2: 35 + (2*7) = 49, ...
+    // 2. Bomb falling speed 
+    this.bombSpeed = this.setting.bombSpeed + (presentLevel * 10); //Level1: 75 + (1*10) = 85, Level2: 75 + (2*10) = 95, ...
+    // 3. Bomb dropping frequency 
+    this.bombFrequency = this.setting.bombFrequency + (presentLevel * 0.05); //Level1: 0.05 + (1*0.05) = 0.1, Level2: 0.05 + (2*0.05) = 0.15 ...
 
     // Creating Spaceship
     this.spaceshipSpeed = this.setting.spaceshipSpeed;
@@ -79,11 +84,11 @@ InGamePosition.prototype.update = function (play) {
         spaceship.x = play.playBoundaries.right;
     }
 
-    //  Moving bullets
+    // Moving bullets
     for (let i = 0; i < bullets.length; i++) {
         let bullet = bullets[i];
         bullet.y -= upSec * this.setting.bulletSpeed;
-        // If our bullet flies out from the canvas, it will be cleared
+        // If our bullet flies out from the canvas it will be cleared
         if (bullet.y < 0) {
             bullets.splice(i--, 1);
         }
@@ -118,6 +123,58 @@ InGamePosition.prototype.update = function (play) {
             this.ufoPresentSinkingValue = 0;
         }
     }
+
+    // UFOS bombing 
+    // Sorting UFOS - which are at the bottom of each column
+    const frontLineUFOs = [];
+    for (let i = 0; i < this.ufos.length; i++) {
+        let ufo = this.ufos[i];
+        if (!frontLineUFOs[ufo.column] || frontLineUFOs[ufo.column].line < ufo.line) {
+            frontLineUFOs[ufo.column] = ufo;
+        }
+    }
+
+    // Give a chance for bombing
+    for (let i = 0; i < this.setting.ufoColumns; i++) {
+        let ufo = frontLineUFOs[i];
+        if (!ufo) continue;
+        let chance = this.bombFrequency * upSec;
+        this.object = new Objects();
+        if (chance > Math.random()) {
+            // make a bomb object and put it into bombs array	
+            this.bombs.push(this.object.bomb(ufo.x, ufo.y + ufo.height / 2));
+        }
+    }
+
+    // Moving bombs
+    for (let i = 0; i < this.bombs.length; i++) {
+        let bomb = this.bombs[i];
+        bomb.y += upSec * this.bombSpeed;
+        // If a bomb falls out of the canvas it will be deleted
+        if (bomb.y > this.height) {
+            this.bombs.splice(i--, 1);
+        }
+    }
+
+    // UFO-bullet collision
+    for (let i = 0; i < this.ufos.length; i++) {
+        let ufo = this.ufos[i];
+        let collision = false;
+        for (let j = 0; j < bullets.length; j++) {
+            let bullet = bullets[j];
+            // collision check
+            if (bullet.x >= (ufo.x - ufo.width / 2) && bullet.x <= (ufo.x + ufo.width / 2) &&
+                bullet.y >= (ufo.y - ufo.height / 2) && bullet.y <= (ufo.y + ufo.height / 2)) {
+                // if there is collision we delete the bullet and set collision true
+                bullets.splice(j--, 1);
+                collision = true;
+            }
+        }
+        // if there is collision we delete the UFO
+        if (collision == true) {
+            this.ufos.splice(i--, 1);
+        }
+    }
 }
 
 InGamePosition.prototype.draw = function (play) {
@@ -129,13 +186,20 @@ InGamePosition.prototype.draw = function (play) {
     ctx.fillStyle = '#ff0000';
     for (let i = 0; i < this.bullets.length; i++) {
         let bullet = this.bullets[i];
-        ctx.fillRect(bullet.x - 1, bullet.y - 6, 3, 6);
+        ctx.fillRect(bullet.x - 1, bullet.y - 6, 2, 6);
     }
 
     // draw UFOS     
     for (let i = 0; i < this.ufos.length; i++) {
         let ufo = this.ufos[i];
         ctx.drawImage(this.ufo_image, ufo.x - (ufo.width / 2), ufo.y - (ufo.height / 2));
+    }
+
+    // draw bombs
+    ctx.fillStyle = "#FE2EF7";  
+    for (let i = 0; i < this.bombs.length; i++) {
+        let bomb = this.bombs[i];
+        ctx.fillRect(bomb.x - 2, bomb.y, 4, 6);
     }
 }
 

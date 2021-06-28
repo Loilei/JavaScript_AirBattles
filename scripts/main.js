@@ -50,7 +50,10 @@ function GameBasics(canvas) {
     ufoLines: 4,
     ufoColumns: 8,
     ufoSpeed: 35,
-    ufoSinkingValue: 30, 
+    ufoSinkingValue: 30,
+    
+    bombSpeed: 75,
+    bombFrequency: 0.05,
 
   };
 
