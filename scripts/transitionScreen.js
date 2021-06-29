@@ -1,4 +1,4 @@
-// --- positionTransfer --- //
+// --- transitionScreen --- //
 
 function TransferPosition(level) {
     this.level = level;

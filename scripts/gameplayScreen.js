@@ -1,4 +1,4 @@
-// --- positionInGame --- //
+// --- gameplayScreen --- //
 
 function InGamePosition(setting, level) {
     this.setting = setting;

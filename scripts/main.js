@@ -1,7 +1,7 @@
 // --- main --- //
 
 // Canvas drawing
-const canvas = document.getElementById('ufoCanvas');
+const canvas = document.getElementById('gameCanvas');
 canvas.width = 900;
 canvas.height = 750;
 const ctx = canvas.getContext('2d');

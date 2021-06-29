@@ -1,4 +1,4 @@
-// --- positionPause --- //
+// --- pauseScreen --- //
 
 function PausePosition() {
 }

@@ -1,4 +1,4 @@
-// --- positionOpening --- //
+// --- mainMenuScreen --- //
 
 function OpeningPosition() {
 }

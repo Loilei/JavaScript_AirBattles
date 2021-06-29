@@ -1,4 +1,4 @@
-// --- positionGameOver --- //
+// --- gameOverScreen --- //
 
 function GameOverPosition() {
 }
