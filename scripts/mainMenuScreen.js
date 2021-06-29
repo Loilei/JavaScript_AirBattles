@@ -1,10 +1,8 @@
-// --- mainMenuScreen --- //
-
-function OpeningPosition() {
+function mainMenu() {
 }
 
-OpeningPosition.prototype.draw = function(play) {	
-	// UFO Hunter
+mainMenu.prototype.draw = function(play) {	
+	// Corona Warfare 2021
     ctx.clearRect(0, 0, play.width, play.height);
 	ctx.font="80px Comic Sans MS";
     ctx.textAlign="center"; 
@@ -13,7 +11,7 @@ OpeningPosition.prototype.draw = function(play) {
 	gradient.addColorStop("0.5","red");
 	gradient.addColorStop("1.0","yellow");
 	ctx.fillStyle = gradient;	
-    ctx.fillText("UFO HUNTER", play.width / 2, play.height/2 - 70); 
+    ctx.fillText("Corona Warfare 2021", play.width / 2, play.height/2 - 70); 
 
     // Press 'Space' to start.
     ctx.font="40px Comic Sans MS";
@@ -21,18 +19,18 @@ OpeningPosition.prototype.draw = function(play) {
     ctx.fillText("Press 'Space' to start.", play.width / 2, play.height/2); 
 
     // Game Controls
-    ctx.fillStyle = '#2e2f00';
+    ctx.fillStyle = '#D7DF01';
     ctx.fillText("Game Controls", play.width / 2, play.height/2 + 210); 
     ctx.fillText("Left Arrow : Move Left", play.width / 2, play.height/2 + 260); 
     ctx.fillText("Right Arrow : Move Right", play.width / 2, play.height/2 + 300); 
     ctx.fillText("Space : Fire", play.width / 2, play.height/2 + 340); 
 };
 
-OpeningPosition.prototype.keyDown = function(play, keyboardCode) {
+mainMenu.prototype.keyDown = function(play, keyboardCode) {
     if(keyboardCode == 32)  {
         play.level = 1;
         play.score = 0;
-        play.shields = 2;
-        play.goToPosition(new TransferPosition(play.level));
+        play.extraLives = 2;
+        play.changeScreen(new transitionScreen(play.level));
     }
 };

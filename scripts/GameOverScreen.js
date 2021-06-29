@@ -21,6 +21,6 @@ GameOverPosition.prototype.draw = function(play) {
 
 GameOverPosition.prototype.keyDown = function(play, keyboardCode) {
     if(keyboardCode == 32)  {
-        play.goToPosition(new OpeningPosition());
+        play.changeScreen(new mainMenu());
     }
 };
