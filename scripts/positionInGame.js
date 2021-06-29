@@ -23,7 +23,6 @@ InGamePosition.prototype.entry = function (play) {
 
     // Values ​​that change with levels (1. UFO speed, 2. Bomb falling speed, 3. Bomb dropping frequency)
     let presentLevel = this.level < 11 ? this.level : 10;
-    console.log("Level: " + this.level + " PresentLevel number: " + presentLevel);
     // 1. UFO speed
     this.ufoSpeed = this.setting.ufoSpeed + (presentLevel * 7); //Level1: 35 + (1*7) = 42, Level2: 35 + (2*7) = 49, ...
     // 2. Bomb falling speed 
