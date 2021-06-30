@@ -1,135 +1,143 @@
-
-const canvas = document.getElementById('ufoCanvas')
-canvas.width = 1150;
-canvas.height = 700;
-
+// Canvas drawing
+const canvas = document.getElementById('gameCanvas');
+canvas.width = 960;
+canvas.height = 720;
 const ctx = canvas.getContext('2d');
 
-
-// ctx.fillStyle = 'green';
-// ctx.fillRect(0,0,150,75);
-
-// ctx.font = '38 px Arial';
-// ctx.fillStyle = 'red';
-// ctx.fillText("UFO",30,130);
-// ctx.strokeText("Hunter", 120,120);
-
-// aircraftImage = new Image();
-// aircraftImage.src = "images/aircraft.png";
-
-// aircraftImage.onload = function() {
-//     return ctx.drawImage(aircraftImage, 0, 0);
-// };
-
+// Canvas automatic resizing
 function resize() {
-    const height = window.innerHeight - 20;
-    const ratio = canvas.width / canvas.height;
-    const width = height * ratio;
+  const height = window.innerHeight - 20;
 
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
+  const ratio = canvas.width / canvas.height;
+  const width = height * ratio;
+
+  canvas.style.width = width + 'px';
+  canvas.style.height = height + 'px';
 }
+
 
 window.addEventListener('load', resize, false);
 
+
 function GameBasics(canvas) {
 
-    this.canvas = canvas;
-    this.width = canvas.width;
-    this.height = canvas.height;
+  this.canvas = canvas;
+  this.width = canvas.width;
+  this.height = canvas.height;
 
-    this.playBoundaries = {
-        top: 150,
-        bottom: 650,
-        left: 100,
-        right: 1050
-    };
+  this.playBoundaries = {
+    top: 150,
+    bottom: 650,
+    left: 100,
+    right: 800
+  };
 
-    this.setting = {
-        //FPS :
-        updateSeconds: (1/60),
+  this.level = 1;
+  this.score = 0;
+  this.extraLives = 2;
 
-    }
+  this.settings = {  
+    fps: (1 / 144),
+    playerSpeed: 200,
 
-    this.settings = {
+    bulletSpeed: 130,
+    bulletMaxFrequency: 500,
+ 	
+    enemyLines: 4,                                           	
+    enemyColumns: 8,                                      	 
+    enemySpeed: 35,
+    enemyDecreaseRate: 30,
+    
+    bombSpeed: 75,
+    bombFrequency: 0.05,
+    
+    pointsPerEnemy: 1,
+  };
 
-        //game settings
-    }
-    //collect the positions here
-    this.positionContainer = [];
-
+  this.gameState = [];
+  this.pressedKeys = {};
 }
 
-//current game position
-GameBasics.prototype.presentPosition = function () {
 
-    return this.positionContainer.length > 0 ? this.positionContainer[this.positionContainer.length - 1] : null
-}
-
-//move to desired position
-
-GameBasics.prototype.goToPosition = function(position) {
-    //If we're already in a position clear the positionContainer
-    if (this.presentPosition()) {
-        this.positionContainer.length = 0;
-
-    }
-    //if we infds an 'entry' in a given position, we call it
-    if (position.entry) {
-        position.entry(play);
-    };
-    //setting the current game position in the positionContainer
-    this.positionContainer.push(position);
-
+GameBasics.prototype.currentGameState = function () {
+  return this.gameState.length > 0 ? this.gameState[this.gameState.length - 1] : null;
 };
 
-//push our new position into the positionContainer
 
-GameBasics.prototype.pushPosition = function () {
-    this.positionContainer.push(position);
+GameBasics.prototype.changeScreen = function (position) {
+  // If we're already in a position clear the gameState.
+  if (this.currentGameState()) {
+    this.gameState.length = 0;
+  }
+  // If we find an 'entry' in a given position, we call it. 
+  if (position.entry) {
+    position.entry(play);
+  }
+  // Setting the current game position in the gameState
+  this.gameState.push(position);
 };
 
-//pop the position from the positionContainer
+
+GameBasics.prototype.pushPosition = function (position) {
+  this.gameState.push(position);
+};
+
 
 GameBasics.prototype.popPosition = function () {
-this.positionContainer.pop();
-
+  this.gameState.pop();
 };
+
 
 GameBasics.prototype.start = function () {
-    setInterval(function() {gameLoop(play);}, this.setting.updateSeconds * 1000);
-    (method) GameBasics.goToPosition(position: any): void
-    this.goToPosition(new OpeningPosition());
-
-    // let num = 1;
-    //
-    // function exampleFunction(){
-    //     ctx.clearRect(0,0,play.width, play.height);
-    //     ctx.font = "90px Arial";
-    //     ctx.fillStyle = "#999999";
-    //     ctx.fillText(num, 1100/2,300);
-    //     num++;
-    //
-    // }
-
+  setInterval(function () { gameLoop(play); }, this.settings.fps * 1000);
+  this.changeScreen(new mainMenu());
 };
 
-const play = new GameBasics(canvas);
-play.start();
+
+GameBasics.prototype.keyDown = function (keyboardCode) {
+  this.pressedKeys[keyboardCode] = true;
+  // ???
+  if (this.currentGameState() && this.currentGameState().keyDown) {
+    this.currentGameState().keyDown(this, keyboardCode);
+  }
+};
+
+
+GameBasics.prototype.keyUp = function (keyboardCode) {
+  delete this.pressedKeys[keyboardCode];
+};
+
 
 function gameLoop(play) {
+  let currentGameState = play.currentGameState();
 
-    let presentPosition = play.presentPosition;
-
-    if(presentPosition) {
-        //update
-        if(presentPosition.update) {
-            presentPosition.update(play);
-
-        };
-        if(presentPosition.draw){
-            presentPosition.draw(play);
-        };
-        //draw
-    };
+  if (currentGameState) {
+    if (currentGameState.update) {
+      currentGameState.update(play);
+    }
+    if (currentGameState.draw) {
+      currentGameState.draw(play);
+    }
+  }
 }
+
+
+
+window.addEventListener("keydown", function (e) {
+  const keyboardCode = e.which || event.keyCode;
+  if (keyboardCode == 37 || keyboardCode == 39 || keyboardCode == 32) { e.preventDefault(); } //space/left/right (32/37/29)
+  play.keyDown(keyboardCode);
+});
+
+
+window.addEventListener("keyup", function (e) {
+  const keyboardCode = e.which || event.keyCode;
+  play.keyUp(keyboardCode);
+});
+
+
+// Create a GameBasics object
+const play = new GameBasics(canvas);
+play.sounds = new Sounds(); 
+play.sounds.init();
+play.start();
