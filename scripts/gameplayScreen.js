@@ -41,7 +41,7 @@ gameplayScreen.prototype.entry = function (play) {
             this.object = new Objects();
             let x, y;
             x = (play.width / 2) + (column * 50) - ((columns - 1) * 25);
-            y = (play.playBoundaries.top + 30) + (line * 30);
+            y = (play.playBoundaries.top + 50) + (line * 50);
             enemiesInit.push(this.object.enemy(
                 x,
                 y,
