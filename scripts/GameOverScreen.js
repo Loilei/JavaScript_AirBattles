@@ -1,5 +1,3 @@
-// --- gameOverScreen --- //
-
 function GameOverPosition() {
 }
 

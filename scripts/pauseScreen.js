@@ -1,5 +1,3 @@
-// --- pauseScreen --- //
-
 function PausePosition() {
 }
 
@@ -27,10 +25,9 @@ PausePosition.prototype.draw = function(play) {
 
 PausePosition.prototype.keyDown = function(play, keyboardCode) {
     if(keyboardCode == 80) { // Back: P
-        play.popPosition();
+        play.popScreen();
     }
     if(keyboardCode == 27) { // Quit: ESC
-        play.pushPosition(new GameOverPosition());
+        play.pushScreen(new GameOverPosition());
     }
 };
-

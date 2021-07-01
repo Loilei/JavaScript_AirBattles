@@ -1,14 +1,13 @@
-// --- objects --- //
 function Objects() {
 };
 
-Objects.prototype.spaceship = function (x, y, spaceship_image) {
+Objects.prototype.player = function (x, y, playerImage) {
 	this.x = x;
 	this.y = y;
 	this.width = 34;
 	this.height = 28;
-	this.spaceship_image = spaceship_image;
-	this.spaceship_image.src = "images/ship.png";
+	this.playerImage = playerImage;
+	this.playerImage.src = "images/ship.png";
 	return this;
 };
 
@@ -18,17 +17,17 @@ Objects.prototype.bullet = function(x, y) {
 	return this;
 };
 
-Objects.prototype.ufo = function(x, y, line, column, ufo_image, level) {
+Objects.prototype.enemy = function(x, y, line, column, enemyImage, level) {
     this.x = x;
     this.y = y;
     this.line = line;
     this.column = column;
     this.width = 32;  
     this.height = 24;  
-	this.ufo_image = ufo_image;  
+	this.enemyImage = enemyImage;  
 	this.level = level;
 	//even-odd level selector		 
-	this.ufo_image.src = (this.level%2==0) ? "images/ufo2.png" : "images/ufo.png"; 
+	this.enemyImage.src = (this.level%2==0) ? "images/enemy2.png" : "images/enemy.png"; 
 	return this;	
 };
 

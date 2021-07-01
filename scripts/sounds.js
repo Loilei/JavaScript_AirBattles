@@ -1,5 +1,3 @@
-// --- sounds --- //
-
 function Sounds() {
     this.muted = false;
 }

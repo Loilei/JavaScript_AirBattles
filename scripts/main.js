@@ -64,26 +64,23 @@ GameBasics.prototype.currentGameState = function () {
 };
 
 
-GameBasics.prototype.changeScreen = function (position) {
-  // If we're already in a position clear the gameState.
+GameBasics.prototype.changeScreen = function (newScreen) {
   if (this.currentGameState()) {
     this.gameState.length = 0;
   }
-  // If we find an 'entry' in a given position, we call it. 
-  if (position.entry) {
-    position.entry(play);
+  if (newScreen.entry) {
+    newScreen.entry(play);
   }
-  // Setting the current game position in the gameState
-  this.gameState.push(position);
+  this.gameState.push(newScreen);
 };
 
 
-GameBasics.prototype.pushPosition = function (position) {
-  this.gameState.push(position);
+GameBasics.prototype.pushScreen = function (newScreen) {
+  this.gameState.push(newScreen);
 };
 
 
-GameBasics.prototype.popPosition = function () {
+GameBasics.prototype.popScreen = function () {
   this.gameState.pop();
 };
 
