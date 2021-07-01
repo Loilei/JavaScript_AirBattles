@@ -22,12 +22,12 @@ Objects.prototype.enemy = function(x, y, line, column, enemyImage, level) {
     this.y = y;
     this.line = line;
     this.column = column;
-    this.width = 32;  
-    this.height = 24;  
+    this.width = 40;
+    this.height = 40;
 	this.enemyImage = enemyImage;  
 	this.level = level;
 	//even-odd level selector		 
-	this.enemyImage.src = (this.level%2==0) ? "images/enemy2.png" : "images/enemy.png"; 
+	this.enemyImage.src = (this.level%2==0) ? "images/corona2.png" : "images/corona1.png";
 	return this;	
 };
 
