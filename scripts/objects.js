@@ -5,9 +5,9 @@ Objects.prototype.player = function (x, y, playerImage) {
 	this.x = x;
 	this.y = y;
 	this.width = 34;
-	this.height = 28;
+	this.height = 62;
 	this.playerImage = playerImage;
-	this.playerImage.src = "images/ship.png";
+	this.playerImage.src = "images/vaccine1.png";
 	return this;
 };
 
